@@ -81,7 +81,7 @@ let config = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-          filename: 'css/[name.[contenthash].css',
+          filename: 'css/[name].[contenthash].css',
           chunkFilename: '[id].css'
         }),
         ...PAGES.map(page => new HtmlWebpackPlugin({
@@ -95,8 +95,7 @@ let config = {
 }
 
 module.exports = (env, argv) => {
-    if (argv.mode === 'development' || argv.mode === 'devServer') {
-        config.devtool = 'inline-source-map';
+    if (argv.mode === 'development') {
         config.module.rules[2].use.unshift({
             loader: 'style-loader',
             options: {
@@ -106,6 +105,7 @@ module.exports = (env, argv) => {
     }
 
     if(process.env.WEBPACK_SERVE) {
+        config.devtool = 'inline-source-map';
         config.output.clean = false;
         config.module.rules[3].generator = {filename: `${PATHS.assets}/img/[name][ext]`};
         config.module.rules[4].generator = {filename: `${PATHS.assets}/fonts/[name][ext]`};
